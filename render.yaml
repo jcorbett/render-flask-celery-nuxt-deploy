@@ -1,6 +1,6 @@
 services:
   - type: worker
-    name: queue
+    name: render-deploy-example-worker
     region: oregon
     env: python
     rootDir: backend
@@ -16,7 +16,7 @@ services:
       - key: PYTHONPATH
         value: $PYTHONPATH:./
   - type: web
-    name: app
+    name: render-deploy-example-app
     region: oregon
     env: python
     rootDir: backend
@@ -34,7 +34,7 @@ services:
       - key: PYTHONPATH
         value: $PYTHONPATH:./
   - type: web
-    name: app-static
+    name: render-deploy-example-static-web
     env: static
     rootDir: webapp
     buildCommand: yarn; yarn build; yarn generate
