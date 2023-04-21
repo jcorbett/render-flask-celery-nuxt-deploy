@@ -3,6 +3,7 @@ services:
     name: queue
     region: oregon
     env: python
+    rootDir: backend
     buildCommand: "pip install -r requirements.txt"
     startCommand: "celery --app tasks worker --loglevel info --concurrency 1"
     autoDeploy: false
@@ -18,12 +19,12 @@ services:
     name: app
     region: oregon
     env: python
+    rootDir: backend
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn backend.api.app:app"
     autoDeploy: false
     domains:
-      - domain: stack.corbett.ai
-        ssl: true
+      - stack-api.corbett.ai
     envVars:
       - key: CELERY_BROKER_URL
         fromService:
@@ -35,11 +36,11 @@ services:
   - type: web
     name: app-static
     env: static
+    rootDir: webapp
     buildCommand: yarn; yarn build; yarn generate
     startCommand: yarn start
     domains:
-      - domain: stack.corbett.ai
-        ssl: true
+      stack.corbett.ai
   - type: redis
     name: celery-redis
     region: oregon
