@@ -1,6 +1,6 @@
 # backend/api/app.py
 import os
-from flask import Flask, flash, render_template, redirect, request, jsonify
+from flask import Flask, flash, redirect, jsonify
 from worker.tasks import add
 
 app = Flask(__name__)
