@@ -40,7 +40,7 @@ services:
     buildCommand: yarn; yarn build; yarn generate
     startCommand: yarn start
     domains:
-      stack.corbett.ai
+      - stack.corbett.ai
   - type: redis
     name: celery-redis
     region: oregon
