@@ -5,7 +5,7 @@ services:
     env: python
     rootDir: backend
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "celery --app tasks worker --loglevel info --concurrency 1"
+    startCommand: "celery --app worker.tasks worker --loglevel info --concurrency 1"
     autoDeploy: false
     envVars:
       - key: CELERY_BROKER_URL
@@ -13,15 +13,13 @@ services:
           name: celery-redis
           type: redis
           property: connectionString
-      - key: PYTHONPATH
-        value: $PYTHONPATH:./
   - type: web
     name: render-deploy-example-app
     region: oregon
     env: python
     rootDir: backend
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn backend.api.app:app"
+    startCommand: "gunicorn app:app"
     autoDeploy: false
     domains:
       - stack-api.corbett.ai
@@ -31,8 +29,6 @@ services:
           name: celery-redis
           type: redis
           property: connectionString
-      - key: PYTHONPATH
-        value: $PYTHONPATH:./
   - type: web
     name: render-deploy-example-static-web
     env: static

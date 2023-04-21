@@ -1,7 +1,7 @@
 # backend/api/app.py
 import os
 from flask import Flask, flash, render_template, redirect, request, jsonify
-from backend.worker.tasks import add
+from worker.tasks import add
 
 app = Flask(__name__)
 app.secret_key = os.getenv('CELERY_BROKER_URL', "super-secret")
@@ -17,3 +17,6 @@ def add_inputs(x, y):
     add.delay(x, y)
     flash("Your addition job has been submitted.")
     return redirect('/')
+
+if __name__ == '__main__':
+    app.run(app)
