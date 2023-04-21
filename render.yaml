@@ -1,0 +1,48 @@
+services:
+  - type: worker
+    name: queue
+    region: oregon
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery --app tasks worker --loglevel info --concurrency 1"
+    autoDeploy: false
+    envVars:
+      - key: CELERY_BROKER_URL
+        fromService:
+          name: celery-redis
+          type: redis
+          property: connectionString
+      - key: PYTHONPATH
+        value: $PYTHONPATH:./
+  - type: web
+    name: app
+    region: oregon
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn backend.api.app:app"
+    autoDeploy: false
+    domains:
+      - domain: example.com
+        ssl: true
+    envVars:
+      - key: CELERY_BROKER_URL
+        fromService:
+          name: celery-redis
+          type: redis
+          property: connectionString
+      - key: PYTHONPATH
+        value: $PYTHONPATH:./
+  - type: web
+    name: app-static
+    env: static
+    buildCommand: yarn; yarn build; yarn generate
+    startCommand: yarn start
+    domains:
+      - domain: example.com
+        ssl: true
+  - type: redis
+    name: celery-redis
+    region: oregon
+    plan: starter # we choose a plan with persistence to ensure tasks are not lost upon restart
+    maxmemoryPolicy: noeviction # recommended policy for queues
+    ipAllowList: [] # only allow internal connections
