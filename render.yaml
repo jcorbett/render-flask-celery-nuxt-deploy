@@ -22,7 +22,7 @@ services:
     startCommand: "gunicorn backend.api.app:app"
     autoDeploy: false
     domains:
-      - domain: example.com
+      - domain: stack.corbett.ai
         ssl: true
     envVars:
       - key: CELERY_BROKER_URL
@@ -38,7 +38,7 @@ services:
     buildCommand: yarn; yarn build; yarn generate
     startCommand: yarn start
     domains:
-      - domain: example.com
+      - domain: stack.corbett.ai
         ssl: true
   - type: redis
     name: celery-redis
