@@ -29,17 +29,17 @@ services:
           name: celery-redis
           type: redis
           property: connectionString
-  - type: web
-    name: render-deploy-example-static-web
-    env: static
-    rootDir: webapp
-    buildCommand: yarn; yarn build; yarn generate
-    startCommand: yarn start
-    domains:
-      - stack.corbett.ai
   - type: redis
     name: celery-redis
     region: oregon
     plan: starter # we choose a plan with persistence to ensure tasks are not lost upon restart
     maxmemoryPolicy: noeviction # recommended policy for queues
     ipAllowList: [] # only allow internal connections
+  - type: web
+    name: render-deploy-example-static-web
+    env: static
+    rootDir: webapp
+    buildCommand: yarn; yarn build; yarn generate
+    staticPublishPath: ./dist
+    domains:
+      - stack.corbett.ai
